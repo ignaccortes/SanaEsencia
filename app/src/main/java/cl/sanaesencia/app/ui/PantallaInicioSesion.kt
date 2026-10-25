@@ -1,9 +1,19 @@
-package cl.sanaesencia.app
+package cl.sanaesencia.app.ui
 
-import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -12,17 +22,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-private val AzulRegistro = Color(0xFF7899BC)
-private val GrafitoRegistro = Color(0xFF202020)
+private val AzulLogin = Color(0xFF7899BC)
+private val GrafitoLogin = Color(0xFF202020)
 
 @Composable
-fun PantallaRegistro(
-    onVolver: () -> Unit
-) {
+fun PantallaInicioSesion(
+    onVolver: ()-> Unit
+){
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = Color.White
-    ) {
+    ){
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -31,32 +41,21 @@ fun PantallaRegistro(
             verticalArrangement = Arrangement.Center
         ) {
             Text(
-                text = "Crear cuenta",
+                text = "Bienvenido de nuevo",
                 fontSize = 28.sp,
                 fontWeight = FontWeight.SemiBold,
-                color = GrafitoRegistro
+                color = GrafitoLogin
             )
 
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = "Comienza a cuidar de tu bienestar",
+                text = "Continúa cuidando de tu bienestar",
                 fontSize = 15.sp,
                 color = Color.DarkGray
             )
 
             Spacer(modifier = Modifier.height(28.dp))
-
-            OutlinedTextField(
-                value = "",
-                onValueChange = {},
-                label = { Text("Nombre Completo") },
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(12.dp),
-                singleLine = true
-            )
-
-            Spacer(modifier = Modifier.height(12.dp))
 
             OutlinedTextField(
                 value = "",
@@ -87,25 +86,25 @@ fun PantallaRegistro(
                     .height(54.dp),
                 shape = RoundedCornerShape(14.dp),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = AzulRegistro
+                    containerColor = AzulLogin
                 )
             ) {
                 Text(
-                    text = "Crear cuenta",
+                    text = "Iniciar sesión",
                     fontSize = 16.sp
                 )
             }
 
-                Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(12.dp))
 
-                TextButton(
-                    onClick = onVolver
-                ) {
-                    Text(
-                        text = "Volver",
-                        color = AzulRegistro
-                    )
-                }
+            TextButton(
+                onClick = onVolver
+            ) {
+                Text(
+                    text = "Volver",
+                    color = AzulLogin
+                )
             }
         }
     }
+}

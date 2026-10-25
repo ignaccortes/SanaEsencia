@@ -1,19 +1,9 @@
-package cl.sanaesencia.app
+package cl.sanaesencia.app.ui
 
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,18 +11,25 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 
-private val AzulLogin = Color(0xFF7899BC)
-private val GrafitoLogin = Color(0xFF202020)
+private val AzulRegistro = Color(0xFF7899BC)
+private val GrafitoRegistro = Color(0xFF202020)
 
 @Composable
-fun PantallaInicioSesion(
-    onVolver: ()-> Unit
-){
+fun PantallaRegistro(
+    onVolver: () -> Unit
+) {
+    var nombre by remember { mutableStateOf("") }
+    var correo by remember { mutableStateOf("") }
+    var contraseña by remember { mutableStateOf("") }
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = Color.White
-    ){
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -41,16 +38,16 @@ fun PantallaInicioSesion(
             verticalArrangement = Arrangement.Center
         ) {
             Text(
-                text = "Bienvenido de nuevo",
+                text = "Crear cuenta",
                 fontSize = 28.sp,
                 fontWeight = FontWeight.SemiBold,
-                color = GrafitoLogin
+                color = GrafitoRegistro
             )
 
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = "Continúa cuidando de tu bienestar",
+                text = "Comienza a cuidar de tu bienestar",
                 fontSize = 15.sp,
                 color = Color.DarkGray
             )
@@ -58,8 +55,19 @@ fun PantallaInicioSesion(
             Spacer(modifier = Modifier.height(28.dp))
 
             OutlinedTextField(
-                value = "",
-                onValueChange = {},
+                value = nombre,
+                onValueChange = { nombre = it },
+                label = { Text("Nombre completo") },
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(12.dp),
+                singleLine = true
+            )
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            OutlinedTextField(
+                value = correo,
+                onValueChange = { correo = it },
                 label = { Text("Correo electrónico") },
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(12.dp),
@@ -69,8 +77,8 @@ fun PantallaInicioSesion(
             Spacer(modifier = Modifier.height(12.dp))
 
             OutlinedTextField(
-                value = "",
-                onValueChange = {},
+                value = contraseña,
+                onValueChange = { contraseña = it },
                 label = { Text("Contraseña") },
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(12.dp),
@@ -86,25 +94,25 @@ fun PantallaInicioSesion(
                     .height(54.dp),
                 shape = RoundedCornerShape(14.dp),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = AzulLogin
+                    containerColor = AzulRegistro
                 )
             ) {
                 Text(
-                    text = "Iniciar sesión",
+                    text = "Crear cuenta",
                     fontSize = 16.sp
                 )
             }
 
-            Spacer(modifier = Modifier.height(12.dp))
+                Spacer(modifier = Modifier.height(12.dp))
 
-            TextButton(
-                onClick = onVolver
-            ) {
-                Text(
-                    text = "Volver",
-                    color = AzulLogin
-                )
+                TextButton(
+                    onClick = onVolver
+                ) {
+                    Text(
+                        text = "Volver",
+                        color = AzulRegistro
+                    )
+                }
             }
         }
     }
-}
