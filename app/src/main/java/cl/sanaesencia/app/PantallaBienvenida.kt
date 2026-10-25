@@ -29,7 +29,8 @@ private val Grafito = Color(0xFF202020)
 
 @Composable
 fun PantallaBienvenida(
-    onCrearCuenta: () -> Unit
+    onCrearCuenta: () -> Unit,
+    onIniciarSesion: ()-> Unit
 ) {
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -105,9 +106,7 @@ fun PantallaBienvenida(
             Spacer(modifier = Modifier.height(12.dp))
 
             OutlinedButton(
-                onClick = {
-                    // Este es para ir al inicio de sesión
-                },
+                onClick = onIniciarSesion,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(54.dp),

@@ -1,6 +1,7 @@
 package cl.sanaesencia.app
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -25,8 +26,9 @@ fun PantallaRegistro(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = 28.dp, vertical = 32.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+                .padding(horizontal = 28.dp, vertical = 24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
         ) {
             Text(
                 text = "Crear cuenta",
@@ -92,6 +94,7 @@ fun PantallaRegistro(
                     text = "Crear cuenta",
                     fontSize = 16.sp
                 )
+            }
 
                 Spacer(modifier = Modifier.height(12.dp))
 
@@ -106,4 +109,3 @@ fun PantallaRegistro(
             }
         }
     }
-}
