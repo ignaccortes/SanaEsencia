@@ -60,6 +60,16 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.slideInVertically
+import androidx.compose.runtime.LaunchedEffect
+import kotlinx.coroutines.delay
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.core.tween
+
 
 
 
@@ -73,6 +83,20 @@ fun PantallaHome(
     onAbrirPerfil: () -> Unit
 ) {
     var menuPerfilAbierto by remember { mutableStateOf(false) }
+
+    var mostrarTarjetas by remember { mutableStateOf(false) }
+
+    LaunchedEffect(Unit) {
+        kotlinx.coroutines.delay(700)
+        mostrarTarjetas = true
+    }
+
+    var mostrarContenido by remember { mutableStateOf(false) }
+
+    LaunchedEffect(Unit) {
+        delay(100)
+        mostrarContenido = true
+    }
 
 
 
@@ -355,30 +379,90 @@ fun PantallaHome(
 
             Spacer(modifier = Modifier.height(32.dp))
 
-            Text(
-                text = "Hola, $nombreUsuario 👋",
-                fontSize = 26.sp,
-                fontWeight = FontWeight.Bold,
-                color = GrafitoHome
-            )
 
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(32.dp))
 
-            Text(
-                text = "¿Cómo te gustaría cuidar de ti hoy?",
-                fontSize = 16.sp,
-                color = Color.DarkGray
-            )
+            AnimatedVisibility(
+                visible = mostrarContenido,
+                enter = fadeIn(
+                    animationSpec = androidx.compose.animation.core.tween(500)
+                ) + slideInVertically(
+                    initialOffsetY = { it / 5 },
+                    animationSpec = androidx.compose.animation.core.tween(500)
+                )
+            ) {
+                Column {
+                    Text(
+                        text = "Hola, $nombreUsuario 👋",
+                        fontSize = 26.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = GrafitoHome
+                    )
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    Text(
+                        text = "¿Cómo te gustaría cuidar de ti hoy?",
+                        fontSize = 16.sp,
+                        color = Color.DarkGray
+                    )
+                }
+            }
+
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            Card(
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(22.dp),
-                colors = CardDefaults.cardColors(
-                    containerColor = CelesteHome
+            AnimatedVisibility(
+                visible = mostrarContenido,
+                enter = fadeIn(
+                    animationSpec = androidx.compose.animation.core.tween(
+                        durationMillis = 600,
+                        delayMillis = 150
+                    )
+                ) + slideInVertically(
+                    initialOffsetY = { it / 5 },
+                    animationSpec = androidx.compose.animation.core.tween(
+                        durationMillis = 600,
+                        delayMillis = 150
+                    )
                 )
             ) {
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(22.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = CelesteHome
+                    )
+                ) {
+                    Column(
+                        modifier = Modifier.padding(22.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.Favorite,
+                            contentDescription = null,
+                            tint = AzulHome,
+                            modifier = Modifier.size(32.dp)
+                        )
+
+                        Spacer(modifier = Modifier.height(12.dp))
+
+                        Text(
+                            text = "Tu bienestar importa",
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.SemiBold,
+                            color = GrafitoHome
+                        )
+
+                        Spacer(modifier = Modifier.height(6.dp))
+
+                        Text(
+                            text = "Dedica un momento de tu día a conectar contigo y cuidar tu equilibrio.",
+                            fontSize = 14.sp,
+                            color = GrafitoHome,
+                            lineHeight = 21.sp
+                        )
+                    }
+                }
                 Column(
                     modifier = Modifier.padding(22.dp)
                 ) {
@@ -420,48 +504,78 @@ fun PantallaHome(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            FilaAccesoHome(
-                icono = {
-                    Icon(
-                        imageVector = Icons.Filled.CalendarMonth,
-                        contentDescription = null,
-                        tint = AzulHome,
-                        modifier = Modifier.size(28.dp)
-                    )
-                },
-                titulo = "Mis consultas",
-                descripcion = "Revisa tus próximas sesiones"
-            )
+            AnimatedVisibility(
+                visible = mostrarTarjetas,
+                enter = fadeIn(
+                    animationSpec = tween(durationMillis = 500)
+                ) + slideInVertically(
+                    initialOffsetY = { it / 4 },
+                    animationSpec = tween(durationMillis = 500)
+                )
+            ) {
+                FilaAccesoHome(
+                    icono = {
+                        Icon(
+                            imageVector = Icons.Filled.CalendarMonth,
+                            contentDescription = null,
+                            tint = AzulHome,
+                            modifier = Modifier.size(28.dp)
+                        )
+                    },
+                    titulo = "Mis consultas",
+                    descripcion = "Revisa tus próximas sesiones"
+                )
+            }
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            FilaAccesoHome(
-                icono = {
-                    Icon(
-                        imageVector = Icons.Filled.Spa,
-                        contentDescription = null,
-                        tint = AzulHome,
-                        modifier = Modifier.size(28.dp)
-                    )
-                },
-                titulo = "Tienda de bienestar",
-                descripcion = "Descubre productos para ti"
-            )
+            AnimatedVisibility(
+                visible = mostrarTarjetas,
+                enter = fadeIn(
+                    animationSpec = tween(durationMillis = 500)
+                ) + slideInVertically(
+                    initialOffsetY = { it / 4 },
+                    animationSpec = tween(durationMillis = 500)
+                )
+            ) {
+                FilaAccesoHome(
+                    icono = {
+                        Icon(
+                            imageVector = Icons.Filled.Spa,
+                            contentDescription = null,
+                            tint = AzulHome,
+                            modifier = Modifier.size(28.dp)
+                        )
+                    },
+                    titulo = "Tienda de bienestar",
+                    descripcion = "Descubre productos para ti"
+                )
+            }
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            FilaAccesoHome(
-                icono = {
-                    Icon(
-                        imageVector = Icons.Filled.Person,
-                        contentDescription = null,
-                        tint = AzulHome,
-                        modifier = Modifier.size(28.dp)
-                    )
-                },
-                titulo = "Mi perfil",
-                descripcion = "Consulta tus datos personales"
-            )
+            AnimatedVisibility(
+                visible = mostrarTarjetas,
+                enter = fadeIn(
+                    animationSpec = tween(durationMillis = 500)
+                ) + slideInVertically(
+                    initialOffsetY = { it / 4 },
+                    animationSpec = tween(durationMillis = 500)
+                )
+            ) {
+                FilaAccesoHome(
+                    icono = {
+                        Icon(
+                            imageVector = Icons.Filled.Person,
+                            contentDescription = null,
+                            tint = AzulHome,
+                            modifier = Modifier.size(28.dp)
+                        )
+                    },
+                    titulo = "Mi perfil",
+                    descripcion = "Consulta tus datos personales"
+                )
+            }
 
             Spacer(modifier = Modifier.weight(1f))
 
