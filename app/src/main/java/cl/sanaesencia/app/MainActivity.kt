@@ -20,6 +20,7 @@ import cl.sanaesencia.app.ui.PantallaBienvenida
 import cl.sanaesencia.app.ui.PantallaInicioSesion
 import cl.sanaesencia.app.ui.PantallaRegistro
 import cl.sanaesencia.app.ui.theme.SanaEsenciaTheme
+import cl.sanaesencia.app.ui.PantallaHome
 import cl.sanaesencia.app.viewmodels.MainViewModel
 import cl.sanaesencia.app.viewmodels.RegistroViewModel
 import cl.sanaesencia.app.viewmodels.RegistroViewModelFactory
@@ -95,9 +96,20 @@ class MainActivity : ComponentActivity() {
                         PantallaInicioSesion(
                             onVolver = { mainViewModel.goBack() },
                             onInicioSesionExitoso = {
-                                mainViewModel.navigateTo(Screen.Bienvenida)
+                                navController.navigate(Screen.Home.route) {
+                                    popUpTo(Screen.Bienvenida.route) {
+                                        inclusive = true
+                                    }
+                                    launchSingleTop = true
+                                }
                             },
                             inicioSesionViewModel = inicioSesionViewModel
+                        )
+                    }
+
+                    composable(Screen.Home.route) {
+                        PantallaHome(
+                            nombreUsuario = "Usuario"
                         )
                     }
                 }
