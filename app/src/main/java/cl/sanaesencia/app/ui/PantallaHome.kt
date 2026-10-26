@@ -40,6 +40,17 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.platform.LocalContext
+import android.net.Uri
+import android.widget.Toast
+import cl.sanaesencia.app.camera.crearArchivoFotoPerfil
+import android.Manifest
+import android.content.pm.PackageManager
+import androidx.core.content.ContextCompat
+
 
 private val AzulHome = Color(0xFF7899BC)
 private val CelesteHome = Color(0xFFEAF2F9)
@@ -50,6 +61,90 @@ fun PantallaHome(
     nombreUsuario: String = "Usuario"
 ) {
     var menuPerfilAbierto by remember { mutableStateOf(false) }
+
+
+    val context = LocalContext.current
+
+    var fotoPerfilUri by rememberSaveable {
+        mutableStateOf<String?>(null)
+    }
+
+    var uriFotoPendiente by remember {
+        mutableStateOf<Uri?>(null)
+    }
+
+
+    val lanzadorCamara = rememberLauncherForActivityResult(
+        ActivityResultContracts.TakePicture()
+    ) { guardada ->
+        val pendiente = uriFotoPendiente
+
+        if (guardada && pendiente != null) {
+            fotoPerfilUri = pendiente.toString()
+
+            Toast.makeText(
+                context,
+                "Foto de perfil guardada",
+                Toast.LENGTH_SHORT
+            ).show()
+        } else {
+            Toast.makeText(
+                context,
+                "No se pudo guardar la foto",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+
+        uriFotoPendiente = null
+    }
+
+    fun abrirCamara() {
+        val uri = crearArchivoFotoPerfil(context)
+        uriFotoPendiente = uri
+        lanzadorCamara.launch(uri)
+    }
+
+    val lanzadorPermiso = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { concedido ->
+        if (concedido) {
+            abrirCamara()
+        } else {
+            Toast.makeText(
+                context,
+                "Debes conceder el permiso para tomar una foto",
+                Toast.LENGTH_LONG
+            ).show()
+        }
+    }
+
+    fun pedirFoto() {
+        val tieneCamara = context.packageManager.hasSystemFeature(
+            PackageManager.FEATURE_CAMERA_ANY
+        )
+
+        if (!tieneCamara) {
+            Toast.makeText(
+                context,
+                "Este dispositivo no tiene cámara disponible",
+                Toast.LENGTH_LONG
+            ).show()
+            return
+        }
+
+        val permisoConcedido = ContextCompat.checkSelfPermission(
+            context,
+            Manifest.permission.CAMERA
+        ) == PackageManager.PERMISSION_GRANTED
+
+        if (permisoConcedido) {
+            abrirCamara()
+        } else {
+            lanzadorPermiso.launch(Manifest.permission.CAMERA)
+        }
+    }
+
+
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -103,7 +198,11 @@ fun PantallaHome(
                 Box {
                     androidx.compose.material3.IconButton(
                         onClick = {
-                            menuPerfilAbierto = !menuPerfilAbierto
+                            if (fotoPerfilUri == null) {
+                                pedirFoto()
+                            } else {
+                                menuPerfilAbierto = !menuPerfilAbierto
+                            }
                         }
                     ) {
                         Icon(
