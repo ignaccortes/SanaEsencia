@@ -5,14 +5,9 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -24,13 +19,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-private val AzulSana = Color(0xFF7899BC)
 private val Grafito = Color(0xFF202020)
+private val AzulSana = Color(0xFF7899BC)
 
 @Composable
 fun PantallaBienvenida(
     onCrearCuenta: () -> Unit,
-    onIniciarSesion: ()-> Unit
+    onIniciarSesion: () -> Unit
 ) {
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -62,7 +57,7 @@ fun PantallaBienvenida(
             )
 
             Text(
-                text = "Tu bienestar,\n en un solo lugar",
+                text = "Tu bienestar,\nen un solo lugar",
                 fontSize = 30.sp,
                 lineHeight = 38.sp,
                 fontWeight = FontWeight.SemiBold,
@@ -83,41 +78,11 @@ fun PantallaBienvenida(
 
             Spacer(modifier = Modifier.height(36.dp))
 
-            Button(
-                onClick = {
-                    onCrearCuenta()
+            BotonesBienvenida(
+                onCrearCuenta = onCrearCuenta,
+                onIniciarSesion = onIniciarSesion
+            )
 
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(54.dp),
-                shape = RoundedCornerShape(14.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = AzulSana
-                )
-            ) {
-                Text(
-                    text = "Crear mi cuenta",
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.SemiBold
-                )
-            }
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            OutlinedButton(
-                onClick = onIniciarSesion,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(54.dp),
-                shape = RoundedCornerShape(14.dp)
-            ) {
-                Text(
-                    text = "Ya tengo una cuenta",
-                    color = AzulSana,
-                    fontSize = 16.sp
-                )
-            }
             Spacer(modifier = Modifier.height(28.dp))
 
             Text(

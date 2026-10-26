@@ -95,6 +95,14 @@ class MainActivity : ComponentActivity() {
                             onVolver = {
                                 mainViewModel.goBack()
                             },
+                            onIrInicioSesion = {
+                                navController.navigate(Screen.InicioSesion.route) {
+                                    popUpTo(Screen.Registro.route) {
+                                        inclusive = true
+                                    }
+                                    launchSingleTop = true
+                                }
+                            },
                             registroViewModel = registroViewModel
                         )
                     }
