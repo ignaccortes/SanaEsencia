@@ -24,6 +24,8 @@ import cl.sanaesencia.app.viewmodels.MainViewModel
 import cl.sanaesencia.app.viewmodels.RegistroViewModel
 import cl.sanaesencia.app.viewmodels.RegistroViewModelFactory
 import kotlinx.coroutines.flow.collectLatest
+import cl.sanaesencia.app.viewmodels.InicioSesionViewModel
+import cl.sanaesencia.app.viewmodels.InicioSesionViewModelFactory
 
 class MainActivity : ComponentActivity() {
 
@@ -63,6 +65,10 @@ class MainActivity : ComponentActivity() {
                     factory = RegistroViewModelFactory(usuarioRepository)
                 )
 
+                val inicioSesionViewModel: InicioSesionViewModel = viewModel(
+                    factory = InicioSesionViewModelFactory(usuarioRepository)
+                )
+
                 NavHost(
                     navController = navController,
                     startDestination = Screen.Bienvenida.route
@@ -87,9 +93,11 @@ class MainActivity : ComponentActivity() {
 
                     composable(Screen.InicioSesion.route) {
                         PantallaInicioSesion(
-                            onVolver = {
-                                mainViewModel.goBack()
-                            }
+                            onVolver = { mainViewModel.goBack() },
+                            onInicioSesionExitoso = {
+                                mainViewModel.navigateTo(Screen.Bienvenida)
+                            },
+                            inicioSesionViewModel = inicioSesionViewModel
                         )
                     }
                 }
