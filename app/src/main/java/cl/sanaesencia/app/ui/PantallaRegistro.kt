@@ -37,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import cl.sanaesencia.app.viewmodels.RegistroViewModel
+import cl.sanaesencia.app.viewmodels.RegistroViewModelFactory
 
 private val AzulRegistro = Color(0xFF7899BC)
 private val GrafitoRegistro = Color(0xFF202020)
@@ -44,7 +45,7 @@ private val GrafitoRegistro = Color(0xFF202020)
 @Composable
 fun PantallaRegistro(
     onVolver: () -> Unit,
-    registroViewModel: RegistroViewModel = viewModel()
+    registroViewModel: RegistroViewModel
 ) {
     val uiState by registroViewModel.uiState.collectAsState()
     var mostrarContrasena by remember { mutableStateOf(false) }
@@ -260,8 +261,30 @@ fun PantallaRegistro(
                 )
             ) {
                 Text(
-                    text = "Crear cuenta",
+                    text = if (uiState.cargando) {
+                        "Creando cuenta..."
+                    } else {
+                        "Crear cuenta"
+                    },
                     fontSize = 16.sp
+                )
+            }
+
+            if (uiState.cargando) {
+                Text(
+                    text = "Creando tu cuenta...",
+                    color = GrafitoRegistro
+                )
+            }
+
+            uiState.mensajeRegistro?.let { mensaje ->
+                Text(
+                    text = mensaje,
+                    color = if (uiState.registroExitoso) {
+                        AzulRegistro
+                    } else {
+                        GrafitoRegistro
+                    }
                 )
             }
 

@@ -9,5 +9,7 @@ data class RegistroUiState(
     val errorCorreo: String? = null,
     val errorContrasena: String? = null,
     val errorConfirmarContrasena: String? = null,
-    val registroExitoso: Boolean = false
+    val registroExitoso: Boolean = false,
+    val cargando: Boolean = false,
+    val mensajeRegistro: String? = null
 )
