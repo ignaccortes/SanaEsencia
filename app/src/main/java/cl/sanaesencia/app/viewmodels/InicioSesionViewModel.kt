@@ -79,7 +79,7 @@ class InicioSesionViewModel(
         viewModelScope.launch {
             try {
                 val usuario = usuarioRepository.iniciarSesion(
-                    correo = estado.correo,
+                    correo = estado.correo.trim(),
                     contrasena = estado.contrasena
                 )
 
@@ -88,7 +88,9 @@ class InicioSesionViewModel(
                         it.copy(
                             cargando = false,
                             inicioSesionExitoso = true,
-                            mensajeError = null
+                            mensajeError = null,
+                            nombreUsuario = usuario.nombre,
+                            correoUsuario = usuario.correo
                         )
                     }
                 } else {
@@ -96,11 +98,13 @@ class InicioSesionViewModel(
                         it.copy(
                             cargando = false,
                             inicioSesionExitoso = false,
-                            mensajeError = "Correo o contraseña incorrectos"
+                            mensajeError = "Correo o contraseña incorrectos",
+                            nombreUsuario = "",
+                            correoUsuario = ""
                         )
                     }
                 }
-            } catch (_: Exception) {
+            } catch (e: Exception) {
                 _uiState.update {
                     it.copy(
                         cargando = false,

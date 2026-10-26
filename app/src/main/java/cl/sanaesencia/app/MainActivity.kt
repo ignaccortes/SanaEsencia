@@ -1,4 +1,3 @@
-
 package cl.sanaesencia.app
 
 import android.os.Bundle
@@ -6,6 +5,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -19,14 +20,15 @@ import cl.sanaesencia.app.navigation.Screen
 import cl.sanaesencia.app.ui.PantallaBienvenida
 import cl.sanaesencia.app.ui.PantallaInicioSesion
 import cl.sanaesencia.app.ui.PantallaRegistro
-import cl.sanaesencia.app.ui.theme.SanaEsenciaTheme
 import cl.sanaesencia.app.ui.PantallaHome
+import cl.sanaesencia.app.ui.PantallaPerfil
+import cl.sanaesencia.app.ui.theme.SanaEsenciaTheme
 import cl.sanaesencia.app.viewmodels.MainViewModel
 import cl.sanaesencia.app.viewmodels.RegistroViewModel
 import cl.sanaesencia.app.viewmodels.RegistroViewModelFactory
-import kotlinx.coroutines.flow.collectLatest
 import cl.sanaesencia.app.viewmodels.InicioSesionViewModel
 import cl.sanaesencia.app.viewmodels.InicioSesionViewModelFactory
+import kotlinx.coroutines.flow.collectLatest
 
 class MainActivity : ComponentActivity() {
 
@@ -45,6 +47,7 @@ class MainActivity : ComponentActivity() {
                             is NavigationEvent.NavigateTo -> {
                                 navController.navigate(event.route.route)
                             }
+
                             is NavigationEvent.PopBackStack -> {
                                 navController.popBackStack()
                             }
@@ -70,6 +73,8 @@ class MainActivity : ComponentActivity() {
                     factory = InicioSesionViewModelFactory(usuarioRepository)
                 )
 
+                val estadoSesion by inicioSesionViewModel.uiState.collectAsState()
+
                 NavHost(
                     navController = navController,
                     startDestination = Screen.Bienvenida.route
@@ -87,14 +92,18 @@ class MainActivity : ComponentActivity() {
 
                     composable(Screen.Registro.route) {
                         PantallaRegistro(
-                            onVolver = { mainViewModel.goBack() },
+                            onVolver = {
+                                mainViewModel.goBack()
+                            },
                             registroViewModel = registroViewModel
                         )
                     }
 
                     composable(Screen.InicioSesion.route) {
                         PantallaInicioSesion(
-                            onVolver = { mainViewModel.goBack() },
+                            onVolver = {
+                                mainViewModel.goBack()
+                            },
                             onInicioSesionExitoso = {
                                 navController.navigate(Screen.Home.route) {
                                     popUpTo(Screen.Bienvenida.route) {
@@ -109,7 +118,22 @@ class MainActivity : ComponentActivity() {
 
                     composable(Screen.Home.route) {
                         PantallaHome(
-                            nombreUsuario = "Usuario"
+                            nombreUsuario = estadoSesion.nombreUsuario
+                                .ifBlank { "Usuario" },
+                            onAbrirPerfil = {
+                                navController.navigate(Screen.Perfil.route)
+                            }
+                        )
+                    }
+
+                    composable(Screen.Perfil.route) {
+                        PantallaPerfil(
+                            nombreUsuario = estadoSesion.nombreUsuario
+                                .ifBlank { "Usuario" },
+                            correoUsuario = estadoSesion.correoUsuario,
+                            onVolver = {
+                                navController.popBackStack()
+                            }
                         )
                     }
                 }
@@ -117,7 +141,3 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-
-
-
-

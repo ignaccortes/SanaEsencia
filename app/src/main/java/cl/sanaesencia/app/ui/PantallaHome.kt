@@ -50,6 +50,17 @@ import cl.sanaesencia.app.camera.crearArchivoFotoPerfil
 import android.Manifest
 import android.content.pm.PackageManager
 import androidx.core.content.ContextCompat
+import android.graphics.BitmapFactory
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.layout.ContentScale
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.compose.runtime.DisposableEffect
+
 
 
 private val AzulHome = Color(0xFF7899BC)
@@ -58,16 +69,62 @@ private val GrafitoHome = Color(0xFF202020)
 
 @Composable
 fun PantallaHome(
-    nombreUsuario: String = "Usuario"
+    nombreUsuario: String = "Usuario",
+    onAbrirPerfil: () -> Unit
 ) {
     var menuPerfilAbierto by remember { mutableStateOf(false) }
 
 
-    val context = LocalContext.current
 
-    var fotoPerfilUri by rememberSaveable {
-        mutableStateOf<String?>(null)
+    val context = LocalContext.current
+    val lifecycleOwner = LocalLifecycleOwner.current
+
+    val preferencias = remember {
+        context.getSharedPreferences(
+            "sanaesencia_perfil",
+            android.content.Context.MODE_PRIVATE
+        )
     }
+
+    var fotoPerfilUri by remember {
+        mutableStateOf(
+            preferencias.getString("foto_uri", null)
+        )
+    }
+
+    DisposableEffect(lifecycleOwner, preferencias) {
+        val observador = LifecycleEventObserver { _, evento ->
+            if (evento == Lifecycle.Event.ON_RESUME) {
+                fotoPerfilUri = preferencias.getString("foto_uri", null)
+            }
+        }
+
+        lifecycleOwner.lifecycle.addObserver(observador)
+
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observador)
+        }
+    }
+
+
+
+    val fotoPerfil = remember(fotoPerfilUri) {
+        fotoPerfilUri?.let { uri ->
+            try {
+                context.contentResolver.openInputStream(Uri.parse(uri))?.use {
+                    val opciones = BitmapFactory.Options().apply {
+                        inSampleSize = 4
+                    }
+
+                    BitmapFactory.decodeStream(it, null, opciones)
+                        ?.asImageBitmap()
+                }
+            } catch (e: Exception) {
+                null
+            }
+        }
+    }
+
 
     var uriFotoPendiente by remember {
         mutableStateOf<Uri?>(null)
@@ -197,20 +254,31 @@ fun PantallaHome(
 
                 Box {
                     androidx.compose.material3.IconButton(
+
                         onClick = {
-                            if (fotoPerfilUri == null) {
-                                pedirFoto()
-                            } else {
-                                menuPerfilAbierto = !menuPerfilAbierto
-                            }
+                            menuPerfilAbierto = !menuPerfilAbierto
                         }
+
                     ) {
-                        Icon(
-                            imageVector = Icons.Filled.Person,
-                            contentDescription = "Abrir menú de usuario",
-                            tint = AzulHome,
-                            modifier = Modifier.size(28.dp)
-                        )
+
+                        if (fotoPerfil != null) {
+                            Image(
+                                bitmap = fotoPerfil,
+                                contentDescription = "Foto de perfil",
+                                modifier = Modifier
+                                    .size(36.dp)
+                                    .clip(CircleShape),
+                                contentScale = ContentScale.Crop
+                            )
+                        } else {
+                            Icon(
+                                imageVector = Icons.Filled.Person,
+                                contentDescription = "Abrir menú de usuario",
+                                tint = AzulHome,
+                                modifier = Modifier.size(28.dp)
+                            )
+                        }
+
                     }
 
                     DropdownMenu(
@@ -229,6 +297,7 @@ fun PantallaHome(
                             },
                             onClick = {
                                 menuPerfilAbierto = false
+                                onAbrirPerfil()
                             }
                         )
 

@@ -7,5 +7,7 @@ data class InicioSesionUiState(
     val errorContrasena: String? = null,
     val mensajeError: String? = null,
     val cargando: Boolean = false,
-    val inicioSesionExitoso: Boolean = false
+    val inicioSesionExitoso: Boolean = false,
+    val nombreUsuario: String = "",
+    val correoUsuario: String = ""
 )
