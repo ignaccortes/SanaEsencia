@@ -29,6 +29,7 @@ import cl.sanaesencia.app.viewmodels.RegistroViewModelFactory
 import cl.sanaesencia.app.viewmodels.InicioSesionViewModel
 import cl.sanaesencia.app.viewmodels.InicioSesionViewModelFactory
 import kotlinx.coroutines.flow.collectLatest
+import cl.sanaesencia.app.ui.animaciones.TransicionesNavegacion
 
 class MainActivity : ComponentActivity() {
 
@@ -77,7 +78,11 @@ class MainActivity : ComponentActivity() {
 
                 NavHost(
                     navController = navController,
-                    startDestination = Screen.Bienvenida.route
+                    startDestination = Screen.Bienvenida.route,
+                    enterTransition = TransicionesNavegacion.entrada,
+                    exitTransition = TransicionesNavegacion.salida,
+                    popEnterTransition = TransicionesNavegacion.entradaAtras,
+                    popExitTransition = TransicionesNavegacion.salidaAtras
                 ) {
                     composable(Screen.Bienvenida.route) {
                         PantallaBienvenida(

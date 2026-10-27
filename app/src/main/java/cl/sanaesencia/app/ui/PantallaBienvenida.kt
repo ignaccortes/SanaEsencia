@@ -57,7 +57,7 @@ fun PantallaBienvenida(
             )
 
             Text(
-                text = "Tu bienestar,\nen un solo lugar",
+                text = "Tu bienestar\nen un solo lugar",
                 fontSize = 30.sp,
                 lineHeight = 38.sp,
                 fontWeight = FontWeight.SemiBold,
@@ -86,7 +86,7 @@ fun PantallaBienvenida(
             Spacer(modifier = Modifier.height(28.dp))
 
             Text(
-                text = "Un espacio para cuidar de ti",
+                text = "Un espacio para cuidar de ti.",
                 style = MaterialTheme.typography.bodySmall,
                 color = Color.Gray,
                 textAlign = TextAlign.Center

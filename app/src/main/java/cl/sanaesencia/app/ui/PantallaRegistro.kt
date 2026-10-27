@@ -71,7 +71,7 @@ fun PantallaRegistro(
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = "Comienza a cuidar de tu bienestar",
+                text = "El primer paso para cuidar de ti",
                 fontSize = 15.sp,
                 color = Color.DarkGray
             )
