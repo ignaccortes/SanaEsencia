@@ -30,6 +30,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 
 private val AzulHome = Color(0xFF7899BC)
 private val GrafitoHome = Color(0xFF202020)
@@ -60,6 +62,7 @@ fun PantallaHome(
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .verticalScroll(rememberScrollState())
                 .padding(horizontal = 22.dp, vertical = 24.dp)
         ) {
             EncabezadoHome(
@@ -160,7 +163,7 @@ fun PantallaHome(
                 )
             }
 
-            Spacer(modifier = Modifier.weight(1f))
+            Spacer(modifier = Modifier.height(16.dp))
 
             Text(
                 text = "Un espacio para cuidar de ti",

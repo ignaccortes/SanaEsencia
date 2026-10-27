@@ -4,10 +4,14 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
@@ -18,18 +22,18 @@ import cl.sanaesencia.app.data.UsuarioRepository
 import cl.sanaesencia.app.navigation.NavigationEvent
 import cl.sanaesencia.app.navigation.Screen
 import cl.sanaesencia.app.ui.PantallaBienvenida
-import cl.sanaesencia.app.ui.PantallaInicioSesion
-import cl.sanaesencia.app.ui.PantallaRegistro
 import cl.sanaesencia.app.ui.PantallaHome
+import cl.sanaesencia.app.ui.PantallaInicioSesion
 import cl.sanaesencia.app.ui.PantallaPerfil
+import cl.sanaesencia.app.ui.PantallaRegistro
+import cl.sanaesencia.app.ui.animaciones.TransicionesNavegacion
 import cl.sanaesencia.app.ui.theme.SanaEsenciaTheme
+import cl.sanaesencia.app.viewmodels.InicioSesionViewModel
+import cl.sanaesencia.app.viewmodels.InicioSesionViewModelFactory
 import cl.sanaesencia.app.viewmodels.MainViewModel
 import cl.sanaesencia.app.viewmodels.RegistroViewModel
 import cl.sanaesencia.app.viewmodels.RegistroViewModelFactory
-import cl.sanaesencia.app.viewmodels.InicioSesionViewModel
-import cl.sanaesencia.app.viewmodels.InicioSesionViewModelFactory
 import kotlinx.coroutines.flow.collectLatest
-import cl.sanaesencia.app.ui.animaciones.TransicionesNavegacion
 
 class MainActivity : ComponentActivity() {
 
@@ -76,14 +80,19 @@ class MainActivity : ComponentActivity() {
 
                 val estadoSesion by inicioSesionViewModel.uiState.collectAsState()
 
-                NavHost(
-                    navController = navController,
-                    startDestination = Screen.Bienvenida.route,
-                    enterTransition = TransicionesNavegacion.entrada,
-                    exitTransition = TransicionesNavegacion.salida,
-                    popEnterTransition = TransicionesNavegacion.entradaAtras,
-                    popExitTransition = TransicionesNavegacion.salidaAtras
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .safeDrawingPadding()
                 ) {
+                    NavHost(
+                        navController = navController,
+                        startDestination = Screen.Bienvenida.route,
+                        enterTransition = TransicionesNavegacion.entrada,
+                        exitTransition = TransicionesNavegacion.salida,
+                        popEnterTransition = TransicionesNavegacion.entradaAtras,
+                        popExitTransition = TransicionesNavegacion.salidaAtras
+                    ) {
                     composable(Screen.Bienvenida.route) {
                         PantallaBienvenida(
                             onCrearCuenta = {
@@ -147,7 +156,7 @@ class MainActivity : ComponentActivity() {
                             onVolver = {
                                 navController.popBackStack()
                             }
-                        )
+                        )}
                     }
                 }
             }
